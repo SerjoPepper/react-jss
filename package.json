@@ -85,6 +85,8 @@
   },
   "dependencies": {
     "hoist-non-react-statics": "^1.2.0",
+    "is-function": "^1.0.1",
+    "is-plain-object": "^2.0.1",
     "jss": "^7.0.0",
     "jss-preset-default": "^2.0.0",
     "prop-types": "^15.5.8"
