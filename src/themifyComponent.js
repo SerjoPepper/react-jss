@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import injectSheet from './'
 import {CHANNEL} from './ThemeProvider'
 
-const injectThemedSheet = sheetFn => Component => class extends React.Component {
+const themify = fn => class extends React.Component {
   static contextTypes = {
     [CHANNEL]: PropTypes.func,
   };
@@ -13,7 +12,7 @@ const injectThemedSheet = sheetFn => Component => class extends React.Component 
 
   componentWillMount() {
     if (!this.context[CHANNEL]) {
-      throw new Error('[injectThemedSheet] Please use ThemeProvider to be able to use injectThemedSheet')
+      throw new Error('[themify] Please use ThemeProvider to be able to use themify')
     }
 
     const subscribe = this.context[CHANNEL]
@@ -28,11 +27,10 @@ const injectThemedSheet = sheetFn => Component => class extends React.Component 
 
   render() {
     const {theme} = this.state
-    const sheet = sheetFn(theme)
-    const JssComponent = injectSheet(sheet)(Component)
-
-    return <JssComponent {...this.props} />
+    const Component = fn(theme)
+    return <Component {...this.props} />
+    // return fn(theme)
   }
 }
 
-export default injectThemedSheet
+export default themify
