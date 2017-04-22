@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {CHANNEL} from './ThemeProvider'
 
-const themify = fn => class extends React.Component {
+const onThemeUpdate = fn => class extends React.Component {
   static contextTypes = {
     [CHANNEL]: PropTypes.func,
   };
@@ -12,7 +12,7 @@ const themify = fn => class extends React.Component {
 
   componentWillMount() {
     if (!this.context[CHANNEL]) {
-      throw new Error('[themify] Please use ThemeProvider to be able to use themify')
+      throw new Error('[onThemeUpdate] Please use ThemeProvider to be able to use onThemeUpdate')
     }
 
     const subscribe = this.context[CHANNEL]
@@ -27,10 +27,8 @@ const themify = fn => class extends React.Component {
 
   render() {
     const {theme} = this.state
-    const Component = fn(theme)
-    return <Component {...this.props} />
-    // return fn(theme)
+    return fn(theme, this.props)
   }
 }
 
-export default themify
+export default onThemeUpdate
