@@ -1,9 +1,8 @@
-import React from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import isFunction from 'is-function'
 import jss from './jss'
 import createHoc from './createHoc'
-import themifyComponent from './themifyComponent'
+import onThemeUpdate from './onThemeUpdate'
 
 
 /**
@@ -30,17 +29,16 @@ const Container = ({children}) => (children || null)
  * @api public
  */
 export default (localJss = jss) => (
-  function injectSheet(inputStylesOrSheet, options = {}) {
-    if (options.index === undefined) {
-      options.index = indexCounter++
-    }
-    return (InputComponent = Container) => themifyComponent((theme) => {
-      const stylesOrSheet = isFunction(inputStylesOrSheet)
-        ? inputStylesOrSheet(theme)
-        : inputStylesOrSheet
-      const InnerComponent = props => <InputComponent theme={theme} {...props} />
-      const JssHoc = createHoc(localJss, InnerComponent, stylesOrSheet, options)
-      return hoistNonReactStatics(JssHoc, InnerComponent, {inner: true})
-    })
-  }
-)
+   function injectSheet(inputStylesOrSheet, options = {}) {
+     if (options.index === undefined) {
+       options.index = indexCounter++
+     }
+     return (InnerComponent = Container) => onThemeUpdate((theme, props) => {
+       const stylesOrSheet = isFunction(inputStylesOrSheet)
+         ? inputStylesOrSheet(theme)
+         : inputStylesOrSheet
+       const Jss = createHoc(localJss, InnerComponent, stylesOrSheet, options)
+       return hoistNonReactStatics(Jss, InnerComponent, {inner: true})
+     })
+   }
+ )
