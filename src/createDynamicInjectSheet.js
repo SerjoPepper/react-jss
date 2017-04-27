@@ -1,6 +1,9 @@
+import React from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import jss from './jss';
 import createHoc from './createHoc';
+import { onThemeUpdate } from 'theming';
+import createInjectSheet from './createInjectSheet';
 
 /**
  * Global index counter to preserve source order.
@@ -25,13 +28,17 @@ const Container = ({ children }) => children || null;
  * @return {Function}
  * @api public
  */
-export default (localJss = jss) =>
-  function injectSheet(stylesOrSheet, options = {}) {
-    if (options.index === undefined) {
-      options.index = indexCounter++;
-    }
-    return (InnerComponent = Container) => {
-      const Jss = createHoc(localJss, InnerComponent, stylesOrSheet, options);
-      return hoistNonReactStatics(Jss, InnerComponent, { inner: true });
-    };
-  };
+export default (localJss = jss) => {
+  const injectSheet = createInjectSheet(localJss);
+
+  function dynamicInjectSheet(stylesOrSheetFn, options = {}) {
+    return (Component = Container) =>
+      onThemeUpdate(({ theme, props }) => {
+        const stylesOrSheet = stylesOrSheetFn(theme);
+        const Sup = injectSheet(stylesOrSheet)(Component);
+        return <Sup {...props} />;
+      });
+  }
+
+  return dynamicInjectSheet;
+};

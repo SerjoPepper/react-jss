@@ -1,12 +1,13 @@
-import create from './createInjectSheet'
+import create from './createInjectSheet';
 
-export {SheetsRegistry} from 'jss'
-export {default as SheetsRegistryProvider} from './SheetsRegistryProvider'
-export {default as ThemeProvider} from './ThemeProvider'
-export {default as withTheme} from './withTheme'
-export {default as injectThemedSheet} from './injectThemedSheet'
-export {default as jss} from './jss'
-export {create}
+export { SheetsRegistry } from 'jss';
+export { default as SheetsRegistryProvider } from './SheetsRegistryProvider';
+export { default as jss } from './jss';
+export { create };
+export { ThemeProvider, withTheme } from 'theming';
+
+import createDynamicInjectSheet from './createDynamicInjectSheet';
+export const dynamicInjectSheet = createDynamicInjectSheet();
 
 /**
  * Exports injectSheet function as default.
@@ -19,4 +20,4 @@ export {create}
  * @return {Function}
  * @api public
  */
-export default create()
+export default create();
