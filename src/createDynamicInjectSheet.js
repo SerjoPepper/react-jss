@@ -32,11 +32,11 @@ export default (localJss = jss) => {
   const injectSheet = createInjectSheet(localJss);
 
   function dynamicInjectSheet(stylesOrSheetFn, options = {}) {
-    return (Component = Container) =>
+    return (InnerComponent = Container) =>
       onThemeUpdate(({ theme, props }) => {
         const stylesOrSheet = stylesOrSheetFn(theme);
-        const Sup = injectSheet(stylesOrSheet)(Component);
-        return <Sup {...props} />;
+        const Component = injectSheet(stylesOrSheet)(InnerComponent);
+        return <Component {...props} />;
       });
   }
 
